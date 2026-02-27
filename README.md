@@ -1,15 +1,15 @@
-🚀 INSTALAÇÃO MANUAL COMPLETA - EQUIPECHAT
+# 🚀 INSTALAÇÃO MANUAL COMPLETA - EQUIPECHAT
 Ubuntu Server 22.04 LTS
 📋 PRÉ-REQUISITOS
 
-# Acessar servidor
+Acessar servidor
 ```bash
 ssh seu_usuario@ip_do_servidor
 ```
 
-# Domínios (DEVEM apontar para o IP do servidor)
-# backend: api.seusite.com
-# frontend: app.seusite.com
+Domínios (DEVEM apontar para o IP do servidor)
+backend: api.seusite.com
+frontend: app.seusite.com
 
 PARTE 1: CONFIGURAÇÃO INICIAL
 1.1 Criar usuário deploy
@@ -17,17 +17,17 @@ PARTE 1: CONFIGURAÇÃO INICIAL
 sudo useradd -m -s /bin/bash deploy
 ```
 
-# Definir senha (ex: Deploy@2024)
+Definir senha (ex: Deploy@2024)
 ```bash
 sudo passwd deploy
 ```
 
-# Adicionar ao grupo sudo
+Adicionar ao grupo sudo
 ```bash
 sudo usermod -aG sudo deploy
 ```
 
-# Testar acesso
+Testar acesso
 ```bash
 sudo su - deploy
 exit
@@ -55,13 +55,13 @@ curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
 sudo apt install -y nodejs
 ```
 
-# Verificar
+Verificar
 ```bash
 node --version
 npm --version
 ```
 
-# Atualizar npm
+Atualizar npm
 ```bash
 sudo npm install -g npm@latest
 ```
@@ -72,13 +72,13 @@ PARTE 3: INSTALAÇÃO DO POSTGRESQL
 sudo apt install -y postgresql postgresql-contrib
 ```
 
-# Iniciar serviço
+Iniciar serviço
 ```bash
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 ```
 
-# Verificar
+Verificar
 ```bash
 sudo systemctl status postgresql
 psql --version
@@ -86,22 +86,22 @@ psql --version
 
 3.2 Configurar PostgreSQL
 
-# Definir senha do postgres (use a mesma senha do .env)
+Definir senha do postgres (use a mesma senha do .env)
 ```bash
 sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'sua_senha_aqui';"
 ```
 
-# Criar banco para sua instância (ex: empresa)
+Criar banco para sua instância (ex: empresa)
 ```bash
 sudo -u postgres createdb nome_da_empresa
 ```
 
-# Criar usuário do banco
+Criar usuário do banco
 ```bash
 sudo -u postgres psql -c "CREATE USER nome_da_empresa WITH SUPERUSER PASSWORD 'sua_senha_aqui';"
 ```
 
-# Verificar
+Verificar
 ```bash
 sudo -u postgres psql -c "\l" | grep nome_da_empresa
 ```
@@ -109,46 +109,46 @@ sudo -u postgres psql -c "\l" | grep nome_da_empresa
 PARTE 4: INSTALAÇÃO DO DOCKER
 4.1 Instalar Docker
 
-# Dependências
+Dependências
 ```bash
 sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
 ```
 
-# Adicionar chave GPG
+Adicionar chave GPG
 ```bash
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 ```
 
-# Adicionar repositório
+Adicionar repositório
 ```bash
 echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 
-# Instalar Docker
+Instalar Docker
 ```bash
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io
 ```
 
-# Adicionar usuário ao grupo docker
+Adicionar usuário ao grupo docker
 ```bash
 sudo usermod -aG docker deploy
 ```
 
-# Iniciar Docker
+Iniciar Docker
 ```bash
 sudo systemctl start docker
 sudo systemctl enable docker
 ```
 
-# Verificar
+Verificar
 ```bash
 docker --version
 docker-compose --version
 ```
 
 4.2 Criar container Redis
-# Criar Redis (use a porta que definiu, ex: 5000)
+Criar Redis (use a porta que definiu, ex: 5000)
 ```bash
 docker run --name redis-nome_da_empresa \
   -p 5000:6379 \
@@ -157,7 +157,7 @@ docker run --name redis-nome_da_empresa \
   redis-server --requirepass sua_senha_aqui
 ```
 
-# Verificar
+Verificar
 ```bash
 docker ps | grep redis
 ```
@@ -168,14 +168,14 @@ PARTE 5: INSTALAÇÃO DO PM2
 sudo npm install -g pm2
 ```
 
-# Configurar para iniciar com o sistema (como usuário deploy)
+Configurar para iniciar com o sistema (como usuário deploy)
 ```bash
 sudo su - deploy
 pm2 startup systemd
 exit
 ```
 
-# Verificar
+Verificar
 ```bash
 pm2 --version
 ```
@@ -187,22 +187,22 @@ PARTE 6: INSTALAÇÃO DO NGINX
 sudo apt install -y nginx
 ```
 
-# Remover configuração padrão
+Remover configuração padrão
 ```bash
 sudo rm /etc/nginx/sites-enabled/default
 ```
 
-# Configurar limite de upload
+Configurar limite de upload
 ```bash
 echo "client_max_body_size 100M;" | sudo tee /etc/nginx/conf.d/equipechat.conf
 ```
 
-# Testar configuração
+Testar configuração
 ```bash
 sudo nginx -t
 ```
 
-# Reiniciar
+Reiniciar
 ```bash
 sudo systemctl restart nginx
 sudo systemctl enable nginx
@@ -210,20 +210,20 @@ sudo systemctl enable nginx
 
 PARTE 7: INSTALAÇÃO DO CERTBOT (SSL)
 7.1 Instalar Certbot via Snap
-# Instalar snapd
+Instalar snapd
 ```bash
 sudo apt install -y snapd
 sudo snap install core
 sudo snap refresh core
 ```
 
-# Instalar certbot
+Instalar certbot
 ```bash
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 ```
 
-# Verificar
+Verificar
 ```bash
 certbot --version
 ```
@@ -245,17 +245,17 @@ sudo apt install -y libxshmfence-dev libgbm-dev wget unzip \
 PARTE 9: CLONAR E CONFIGURAR O PROJETO
 9.1 Clonar repositório (como usuário deploy)
 
-# Trocar para usuário deploy
+Trocar para usuário deploy
 ```bash
 sudo su - deploy
 ```
 
-# Clonar
+Clonar
 ```bash
 git clone https://github.com/seu-usuario/seu-repo.git /home/deploy/nome_da_empresa/
 ```
 
-# Entrar no diretório
+Entrar no diretório
 ```bash
 cd /home/deploy/nome_da_empresa
 ```
@@ -266,7 +266,7 @@ PARTE 10: CONFIGURAR E COMPILAR BACKEND
 cd /home/deploy/nome_da_empresa/backend
 ```
 
-# Criar .env
+Criar .env
 ```bash
 cat > .env << 'END'
 NODE_ENV=
@@ -312,18 +312,18 @@ npm install --legacy-peer-deps
 ```bash
 npm run build
 ```
-# Ou se tiver erro: 
+Ou se tiver erro: 
 ```bash
 npx tsc --build
 ```
 
 10.4 Executar migrations e seeds
-# Migrations
+Migrations
 ```bash
 npx sequelize db:migrate
 ```
 
-# Seeds
+Seeds
 ```bash
 npx sequelize db:seed:all
 ```
@@ -341,7 +341,7 @@ PARTE 11: CONFIGURAR E COMPILAR FRONTEND
 cd /home/deploy/nome_da_empresa/frontend
 ```
 
-# Criar .env
+Criar .env
 ```bash
 cat > .env << 'END'
 REACT_APP_BACKEND_URL=https://api.seusite.com
@@ -377,7 +377,7 @@ npm install --legacy-peer-deps
 npm run build
 ```
 
-# Isso cria a pasta "build"
+Isso cria a pasta "build"
 11.5 Iniciar frontend com PM2
 
 ```bash
@@ -395,7 +395,7 @@ PARTE 12: CONFIGURAR NGINX
 12.1 Configurar backend
 
 ```bash
-sudo nano /etc/nginx/sites-available/nome_da_empresa-backend
+sudo vim /etc/nginx/sites-available/nome_da_empresa-backend
 ```
 Conteúdo:
 
@@ -421,7 +421,7 @@ server {
 12.2 Configurar frontend
 
 ```bash
-sudo nano /etc/nginx/sites-available/nome_da_empresa-frontend
+sudo vim /etc/nginx/sites-available/nome_da_empresa-frontend
 ```
 
 Conteúdo:
@@ -446,7 +446,7 @@ server {
 ```
 
 12.3 Ativar configurações
-# Criar links simbólicos
+Criar links simbólicos
 ```bash
 sudo ln -s /etc/nginx/sites-available/nome_da_empresa-backend /etc/nginx/sites-enabled/
 ```
@@ -454,12 +454,12 @@ sudo ln -s /etc/nginx/sites-available/nome_da_empresa-backend /etc/nginx/sites-e
 sudo ln -s /etc/nginx/sites-available/nome_da_empresa-frontend /etc/nginx/sites-enabled/
 ```
 
-# Testar configuração
+Testar configuração
 ```bash
 sudo nginx -t
 ```
 
-# Reiniciar Nginx
+Reiniciar Nginx
 ```bash
 sudo systemctl restart nginx
 ```
@@ -467,7 +467,7 @@ sudo systemctl restart nginx
 PARTE 13: CONFIGURAR SSL
 13.1 Gerar certificados
 
-# Substitua pelos seus domínios e email
+Substitua pelos seus domínios e email
 ```bash
 sudo certbot --nginx \
   --non-interactive \
@@ -491,46 +491,46 @@ timedatectl
 
 PARTE 15: VERIFICAÇÃO FINAL
 15.1 Verificar serviços
-# Serviços
+Serviços
 ```bash
 systemctl status postgresql
 systemctl status docker
 systemctl status nginx
 ```
 
-# PM2
+PM2
 ```bash
 pm2 list
 ```
 
-# Docker
+Docker
 ```bash
 docker ps
 ```
 
-# PostgreSQL
+PostgreSQL
 ```bash
 sudo -u postgres psql -c "\l"
 ```
 
 15.2 Testar URLs
-# Testar backend
+Testar backend
 ```bash
 curl -k https://api.seusite.com
 ```
 
-# Testar frontend
+Testar frontend
 ```bash
 curl -k https://app.seusite.com
 ```
 
 15.3 Verificar logs se necessário
-# Logs do backend
+Logs do backend
 ```bash
 pm2 logs nome_da_empresa-backend
 ```
 
-# Logs do Nginx
+Logs do Nginx
 ```bash
 sudo tail -f /var/log/nginx/error.log
 ```
@@ -544,24 +544,24 @@ sudo apt update && sudo apt upgrade -y
 
 Atualizar aplicação
 
-# Como usuário deploy
+Como usuário deploy
 ```bash
 sudo su - deploy
 cd /home/deploy/nome_da_empresa
 ```
 
 
-# Parar processos
+Parar processos
 ```bash
 pm2 stop nome_da_empresa-backend nome_da_empresa-frontend
 ```
 
-# Atualizar código
+Atualizar código
 ```bash
 git pull
 ```
 
-# Backend
+Backend
 ```bash
 cd backend
 npm install --legacy-peer-deps
@@ -569,14 +569,14 @@ npm run build
 npx sequelize db:migrate
 ```
 
-# Frontend
+Frontend
 ```bash
 cd ../frontend
 npm install --legacy-peer-deps
 npm run build
 ```
 
-# Reiniciar
+Reiniciar
 ```bash
 pm2 restart nome_da_empresa-backend nome_da_empresa-frontend
 pm2 save

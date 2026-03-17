@@ -348,6 +348,9 @@ npx sequelize db:seed:all
 ```bash
 pm2 start dist/server.js --name nome_da_empresa-backend
 pm2 save
+
+pm2 startup ubuntu -u deploy
+sudo env PATH=$PATH:/usr/bin pm2 startup ubuntu -u deploy --hp /home/deploy
 ```
 
 PARTE 11: CONFIGURAR E COMPILAR FRONTEND
